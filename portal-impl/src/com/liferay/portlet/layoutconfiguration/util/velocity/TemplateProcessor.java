@@ -26,6 +26,7 @@ import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.WebKeys;
 import com.liferay.portal.util.comparator.PortletRenderWeightComparator;
 import com.liferay.portlet.layoutconfiguration.util.RuntimePortletUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -173,8 +174,27 @@ public class TemplateProcessor implements ColumnProcessor {
 				WebKeys.RENDER_PORTLET_RESOURCE, Boolean.TRUE);
 
 			return RuntimePortletUtil.processPortlet(
-				_servletContext, _request, _response, null, null, _portletId,
+				_servletContext, _request, _response, null, null, portletId,
 				null, false);
+		}
+		finally {
+			_request.removeAttribute(WebKeys.RENDER_PORTLET_RESOURCE);
+		}
+	}
+
+	public String processPortlet(String portletId, String queryString, String defaultPreferences) throws Exception {
+		try {
+			_request.setAttribute(
+				WebKeys.RENDER_PORTLET_RESOURCE, Boolean.TRUE);
+			
+			if (Validator.isNotNull(defaultPreferences)) {
+					PortletPreferencesFactoryUtil.getPortletSetup(
+						_request, portletId, defaultPreferences);
+			}
+
+			return RuntimePortletUtil.processPortlet(
+				_servletContext, _request, _response, null, null, portletId,
+				queryString, false);
 		}
 		finally {
 			_request.removeAttribute(WebKeys.RENDER_PORTLET_RESOURCE);
