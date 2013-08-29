@@ -15,13 +15,16 @@
 package com.liferay.portal.kernel.util;
 
 import java.text.DateFormat;
-
 import java.util.Date;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class ReleaseInfo {
+  
+  private static String _PCE_VERSION = System.getProperty("pce.version" , StringPool.BLANK);
+  
+  private static String _PCE_BUILD_DATE = System.getProperty("build.date" , StringPool.BLANK);
 
 	public static final int RELEASE_5_0_0_BUILD_NUMBER = 5000;
 
@@ -110,7 +113,7 @@ public class ReleaseInfo {
 			_releaseInfo =
 				_RELEASE_INFO_PREFIX + _NAME + " " + _VERSION_DISPLAY_NAME +
 					" (" + _CODE_NAME + " / Build " + _BUILD + " / " + _DATE +
-						")" + _RELEASE_INFO_SUFFIX;
+						") PCE " + _PCE_VERSION + " / " + _PCE_BUILD_DATE + " " + _RELEASE_INFO_SUFFIX;
 		}
 
 		return _releaseInfo;
@@ -131,14 +134,28 @@ public class ReleaseInfo {
 	public static final String getVersion() {
 		return _VERSION;
 	}
+	
+	public static final String getPceVersion() {
+    return _PCE_VERSION;
+  }
+	
+	public static final String getPceBuildDate() {
+    return _PCE_BUILD_DATE;
+  }
+	
+	public static final String getPceDisplayVersion() {
+	  if (_pceDisplayVersion == null) {
+	    _pceDisplayVersion = "Liferay " + _VERSION_DISPLAY_NAME + " PCE " + _PCE_VERSION;
+	  }
+	  
+	  return _pceDisplayVersion;
+  }
 
 	private static final String _BUILD = "6101";
 
 	private static final int _BUILD_NUMBER = GetterUtil.getInteger(_BUILD);
 
 	private static final String _CODE_NAME = "Paton";
-
-	private static final String _DATE = "July 31, 2012";
 
 	private static final String _NAME = "Liferay Portal Community Edition";
 
@@ -153,10 +170,13 @@ public class ReleaseInfo {
 	private static final String _VENDOR = "Liferay, Inc.";
 
 	private static final String _VERSION = "6.1.1";
+	
+  private static final String _DATE = "July 31, 2012";
 
 	private static final String _VERSION_DISPLAY_NAME = "6.1.1 CE GA2 Patched";
 
 	private static String _releaseInfo;
 	private static String _serverInfo;
+	private static String _pceDisplayVersion;
 
 }
