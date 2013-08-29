@@ -332,6 +332,17 @@ public class Creole10Parser]]></replacevalue>
 		</java>
 	</target>
 
+	<target name="build-buildinfo">
+		<java
+                        classname="com.liferay.portal.tools.BuildInfoBuilder"
+                        classpathref="project.classpath"
+                        fork="true"
+                        newenvironment="true"
+                >
+                        <jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+                </java>
+        </target>
+
 	<target name="build-ruby-gems">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
@@ -1048,6 +1059,8 @@ public class Creole10Parser]]></replacevalue>
 				<antcall target="build-common-java.compile" />
 			</else>
 		</if>
+				
+		<antcall target="build-buildinfo" inheritAll="false" />
 
 		<antcall target="print-current-time" />
 	</target>
