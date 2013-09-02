@@ -17,6 +17,8 @@ package com.liferay.portal.tools;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Properties;
 
 import com.liferay.portal.util.FileImpl;
 
@@ -26,40 +28,49 @@ import com.liferay.portal.util.FileImpl;
  */
 public class BuildInfoBuilder {
 
-	public static void main(String[] args) {
-		new BuildInfoBuilder();
-	}
+  public static void main(String[] args) {
+    new BuildInfoBuilder();
+  }
 
-	public BuildInfoBuilder() {
-		try {		
-			File file = new File(
-				"../portal-service/src/com/liferay/portal/kernel/util/" +
-					"ReleaseInfo.java");
+  public BuildInfoBuilder() {
+    try {
 
-			String content = _fileUtil.read(file);
+      String machineName = System.getProperty("user.name");
+      
+      Properties releaseProps = _fileUtil.toProperties("../release." + machineName + ".properties");
+      if (releaseProps == null || releaseProps.isEmpty()) {
+        releaseProps = _fileUtil.toProperties("../release.properties");
+      }
 
-			// Get date
+      File file = new File("../portal-service/src/com/liferay/portal/kernel/util/" + "ReleaseInfo.java");
 
-			DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+      String content = _fileUtil.read(file);
 
-			String date = dateFormat.format(new Date());
+      String pceVersion = releaseProps.getProperty("pce.version");
+      content = setClassProperty("_PCE_VERSION", pceVersion, content);
 
-			int x = content.indexOf("String _DATE = \"");
-			x = content.indexOf("\"", x) + 1;
+      DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
+      String date = dateFormat.format(new Date());
+      content = setClassProperty("_PCE_BUILD_DATE", date, content);
 
-			int y = content.indexOf("\"", x);
+      _fileUtil.write(file, content);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-			content = content.substring(0, x) + date + content.substring(y);
+  private String setClassProperty(String propertyName,
+                                  String value,
+                                  String content) {
+    int x = content.indexOf("String " + propertyName +" = \"");
+    x = content.indexOf("\"", x) + 1;
 
-			// Update ReleaseInfo.java
+    int y = content.indexOf("\"", x);
 
-			_fileUtil.write(file, content);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    content = content.substring(0, x) + value + content.substring(y);
+    return content;
+  }
 
-	private static FileImpl _fileUtil = FileImpl.getInstance();
+  private static FileImpl _fileUtil = FileImpl.getInstance();
 
 }
