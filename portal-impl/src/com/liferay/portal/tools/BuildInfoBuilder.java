@@ -17,6 +17,7 @@ package com.liferay.portal.tools;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 import com.liferay.portal.util.FileImpl;
 
@@ -31,12 +32,41 @@ public class BuildInfoBuilder {
 	}
 
 	public BuildInfoBuilder() {
-		try {		
+		try {
+
+			String machineName = System.getProperty("user.name");
+
+			Properties releaseProps = _fileUtil.toProperties("../release.properties");
+			Properties releaseMachineProps = _fileUtil.toProperties("../release." + machineName + ".properties");
+			if (releaseMachineProps != null) {
+				releaseProps.putAll(releaseMachineProps);
+			}
+			
 			File file = new File(
 				"../portal-service/src/com/liferay/portal/kernel/util/" +
 					"ReleaseInfo.java");
 
 			String content = _fileUtil.read(file);
+			
+			String version = releaseProps.getProperty("lp.version") +"-"+ releaseProps.getProperty("pce.version");
+			
+			int x = content.indexOf("String _VERSION = \"");
+
+			x = content.indexOf("\"", x) + 1;
+
+			int y = content.indexOf("\"", x);
+
+			content = content.substring(0, x) + version + content.substring(y);
+			
+			String versionDisplayName = version + " PCE GA2";
+			
+			x = content.indexOf("String _VERSION_DISPLAY_NAME = \"");
+
+			x = content.indexOf("\"", x) + 1;
+
+			y = content.indexOf("\"", x);
+
+			content = content.substring(0, x) + versionDisplayName + content.substring(y);
 
 			// Get date
 
@@ -44,10 +74,10 @@ public class BuildInfoBuilder {
 
 			String date = dateFormat.format(new Date());
 
-			int x = content.indexOf("String _DATE = \"");
+			x = content.indexOf("String _DATE = \"");
 			x = content.indexOf("\"", x) + 1;
 
-			int y = content.indexOf("\"", x);
+			y = content.indexOf("\"", x);
 
 			content = content.substring(0, x) + date + content.substring(y);
 
