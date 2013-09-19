@@ -351,30 +351,26 @@ public class Creole10Parser]]></replacevalue>
 		<mkdir dir="${tstamp.value}/compass" />
 
 		<get
-			dest="${tstamp.value}/compass/compass-0.11.5.gem"
-			src="http://rubygems.org/downloads/compass-0.11.5.gem"
+			dest="${tstamp.value}/compass/compass-0.12.2.gem"
+			src="http://rubygems.org/downloads/compass-0.12.2.gem"
 		/>
 
 		<java
 			fork="true"
 			jar="${project.dir}/lib/portal/jruby.jar"
 		>
-			<arg line="-S gem install -i ./${tstamp.value}/output ${tstamp.value}/compass/compass-0.11.5.gem --no-rdoc --no-ri" />
+			<arg line="-S gem install -i ./${tstamp.value}/output ${tstamp.value}/compass/compass-0.12.2.gem --no-rdoc --no-ri" />
 		</java>
 
-		<mkdir dir="${tstamp.value}/sass" />
-
-		<get
-			dest="${tstamp.value}/sass/sass-3.1.7.gem"
-			src="http://rubygems.org/downloads/sass-3.1.7.gem"
-		/>
-
-		<java
-			fork="true"
-			jar="${project.dir}/lib/portal/jruby.jar"
-		>
-			<arg line="-S gem install -i ./${tstamp.value}/output ${tstamp.value}/sass/sass-3.1.7.gem --no-rdoc --no-ri" />
-		</java>
+		<if>
+			<os family="windows" />
+			<then>
+				<replace dir="${tstamp.value}/output/bin/">
+					<replacetoken><![CDATA[#! jruby]]></replacetoken>
+					<replacevalue><![CDATA[#!/usr/bin/env jruby]]></replacevalue>
+				</replace>
+			</then>
+		</if>
 
 		<jar
 			basedir="${tstamp.value}/output"
