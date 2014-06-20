@@ -238,7 +238,7 @@ StringBuilder friendlyURLBase = new StringBuilder();
 		}
 	}
 
-	toggleLayoutTypeFields('<%= selLayout.getType() %>');
+	toggleLayoutTypeFields('<%= HtmlUtil.escapeJS(selLayout.getType()) %>');
 
 	var typeSelector = A.one('#<portlet:namespace />type');
 
