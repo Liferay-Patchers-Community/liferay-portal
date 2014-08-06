@@ -26,8 +26,19 @@
 
 <%
 String contentsLanguageId = ParamUtil.getString(request, "contentsLanguageId");
+
+Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
+
+contentsLanguageId = LocaleUtil.toLanguageId(contentsLocale);
+
 String cssClasses = ParamUtil.getString(request, "cssClasses");
+
 String languageId = ParamUtil.getString(request, "languageId");
+
+Locale locale = LocaleUtil.fromLanguageId(languageId);
+
+languageId = LocaleUtil.toLanguageId(locale);
+
 long wikiPageResourcePrimKey = ParamUtil.getLong(request, "wikiPageResourcePrimKey");
 String attachmentURLPrefix = ParamUtil.getString(request, "attachmentURLPrefix");
 boolean resizable = ParamUtil.getBoolean(request, "resizable");
@@ -40,14 +51,12 @@ CKEDITOR.config.attachmentURLPrefix = '<%= HtmlUtil.escapeJS(attachmentURLPrefix
 CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
 
 <%
-Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
-
 String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 %>
 
 CKEDITOR.config.contentsLangDirection = '<%= HtmlUtil.escapeJS(contentsLanguageDir) %>';
 
-CKEDITOR.config.contentsLanguage = '<%= HtmlUtil.escapeJS(contentsLanguageId.replace("iw_", "he_")) %>';
+CKEDITOR.config.contentsLanguage = '<%= contentsLanguageId.replace("iw_", "he_") %>';
 
 CKEDITOR.config.decodeLinks = true;
 
@@ -59,7 +68,7 @@ CKEDITOR.config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
 
 CKEDITOR.config.height = 265;
 
-CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId.replace("iw_", "he_")) %>';
+CKEDITOR.config.language = '<%= languageId.replace("iw_", "he_") %>';
 
 CKEDITOR.config.removePlugins = [
 	'elementspath',

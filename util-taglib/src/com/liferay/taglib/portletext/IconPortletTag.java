@@ -15,6 +15,7 @@
 package com.liferay.taglib.portletext;
 
 import com.liferay.portal.kernel.servlet.taglib.FileAvailabilityUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.theme.PortletDisplay;
@@ -71,7 +72,7 @@ public class IconPortletTag extends IconTag {
 		}
 
 		setAlt(StringPool.BLANK);
-		setMessage(message);
+		setMessage(HtmlUtil.escape(message));
 		setSrc(src);
 
 		return super.getPage();

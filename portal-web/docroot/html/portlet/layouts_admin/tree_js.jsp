@@ -129,6 +129,14 @@ if (!selectableTree) {
 				className += ' ' + data.cssClass;
 			}
 
+			if (!data.uuid) {
+				data.uuid = "";
+			}
+
+			if (!data.id) {
+				data.id = "";
+			}
+
 			if (<%= checkContentDisplayPage %> && !data.contentDisplayPage) {
 				className += ' layout-page-invalid';
 			}
@@ -141,7 +149,7 @@ if (!selectableTree) {
 				}
 			);
 
-			return '<a class="' + className + '" data-uuid="' + data.uuid + '" href="' + href + '" id="' + data.id + '" title="' + data.title + '">' + data.label + '</a>';
+			return '<a class="' + className + '" data-uuid="' + Util.escapeHTML(data.uuid) + '" href="' + href + '" id="' + Util.escapeHTML(data.id) + '" title="' + data.title + '">' + data.label + '</a>';
 		},
 
 		extractGroupId: function(node) {

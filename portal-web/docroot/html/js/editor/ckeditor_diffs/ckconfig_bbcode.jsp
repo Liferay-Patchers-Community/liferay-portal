@@ -29,10 +29,21 @@
 
 <%
 String contentsLanguageId = ParamUtil.getString(request, "contentsLanguageId");
+
+Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
+
+contentsLanguageId = LocaleUtil.toLanguageId(contentsLocale);
+
 String cssPath = ParamUtil.getString(request, "cssPath");
 String cssClasses = ParamUtil.getString(request, "cssClasses");
 String imagesPath = ParamUtil.getString(request, "imagesPath");
+
 String languageId = ParamUtil.getString(request, "languageId");
+
+Locale locale = LocaleUtil.fromLanguageId(languageId);
+
+languageId = LocaleUtil.toLanguageId(locale);
+
 String emoticonsPath = ParamUtil.getString(request, "emoticonsPath");
 boolean resizable = ParamUtil.getBoolean(request, "resizable");
 
@@ -88,14 +99,12 @@ CKEDITOR.config.bodyClass = 'html-editor <%= HtmlUtil.escapeJS(cssClasses) %>';
 CKEDITOR.config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
 
 <%
-Locale contentsLocale = LocaleUtil.fromLanguageId(contentsLanguageId);
-
 String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 %>
 
 CKEDITOR.config.contentsLangDirection = '<%= HtmlUtil.escapeJS(contentsLanguageDir) %>';
 
-CKEDITOR.config.contentsLanguage = '<%= HtmlUtil.escapeJS(contentsLanguageId.replace("iw_", "he_")) %>';
+CKEDITOR.config.contentsLanguage = '<%= contentsLanguageId.replace("iw_", "he_") %>';
 
 CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
 
@@ -117,7 +126,7 @@ CKEDITOR.config.format_tags = 'p;pre';
 
 CKEDITOR.config.imagesPath = '<%= HtmlUtil.escapeJS(imagesPath) %>/message_boards/';
 
-CKEDITOR.config.language = '<%= HtmlUtil.escapeJS(languageId.replace("iw_", "he_")) %>';
+CKEDITOR.config.language = '<%= languageId.replace("iw_", "he_") %>';
 
 CKEDITOR.config.newThreadURL = '<%= MBThreadConstants.NEW_THREAD_URL %>';
 

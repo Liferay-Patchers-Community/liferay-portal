@@ -46,7 +46,7 @@ if (mergeUrlTags || mergeLayoutTags) {
 		titleEntry = compilerTagNames[compilerTagNames.length - 1];
 	}
 
-	String portletTitle = HtmlUtil.unescape(portletDisplay.getTitle());
+	String portletTitle = portletDisplay.getTitle();
 
 	portletTitle = AssetUtil.substituteTagPropertyVariables(scopeGroupId, titleEntry, portletTitle);
 
